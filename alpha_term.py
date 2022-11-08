@@ -67,6 +67,10 @@ class AlphaTerm:
             return AlphaTerm(new_coefficient, self.__alpha, self.__exponent)
         elif type(other) == type(self):
             other: AlphaTerm
+            if other.is_equal_one:
+                return self.__copy__()
+            if other.is_equal_zero:
+                return other
             if other.get_alpha() == self.__alpha:
                 new_coefficient = other.get_coefficient() * self.__coefficient
                 new_exponent = other.get_exponent() + self.__exponent
