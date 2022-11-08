@@ -38,7 +38,3 @@ class AlphaTerm:
 
     def __str__(self):
         return self.get_full_term()
-
-
-term1 = AlphaTerm()
-print(term1)
