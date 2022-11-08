@@ -84,6 +84,10 @@ class AlphaTerm:
         return AlphaTerm(self.__coefficient, self.__alpha, self.__exponent)
 
     def __pow__(self, power):
+        if power == 0:
+            new_object = self.__copy__()
+            new_object.is_equal_one = True
+            return new_object
         if isinstance(power, int):
             new_coefficient = self.__coefficient ** power
             new_exponent = self.__exponent * power
