@@ -1,4 +1,4 @@
-from multiple_alpha_term import MultipleAlphaTerm
+from .multiple_alpha_term import MultipleAlphaTerm
 
 
 class AlphaTerm:
