@@ -6,13 +6,13 @@ class MultipleAlphaTerm:
         self.seperated_terms = self.seperate_by_alphas()
 
     @staticmethod
-    def __multiply_alpha_bros(terms):
+    def __multiply_alpha_bros(terms) -> 'AlphaTerm':
         result = 1
         for term in terms:
             result *= term
         return result
 
-    def seperate_by_alphas(self):
+    def seperate_by_alphas(self) -> list:
         terms_dict = dict()
         for _term in self.terms:
             if _term.is_equal_one:
@@ -32,7 +32,7 @@ class MultipleAlphaTerm:
 
         return final_terms
 
-    def get_full_term(self):
+    def get_full_term(self) -> str:
         alpha_exp = ""
 
         for term in self.seperated_terms:
@@ -45,12 +45,19 @@ class MultipleAlphaTerm:
         if self.coefficient.is_integer():
             self.coefficient = int(self.coefficient)
 
-        return str(self.coefficient) + alpha_exp
+        return ("" if self.coefficient == 1.0 else str(self.coefficient)) + alpha_exp
 
-    def __str__(self):
+    def turn_to_known(self, **values) -> float:
+        result = 1
+        for term in self.seperated_terms:
+            result *= term.turn_to_known(values[term.get_alpha()])
+
+        return result
+
+    def __str__(self) -> str:
         return self.get_full_term()
 
-    def __mul__(self, other):
+    def __mul__(self, other) -> 'MultipleAlphaTerm':
         if isinstance(other, int) or isinstance(other, float):
             return MultipleAlphaTerm(self.terms, _add_coefficient=other * self.add_coefficient)
         elif isinstance(other, type(self.terms[-1])):  # self.terms[-1] always will be an AlphaTerm object.
@@ -71,4 +78,24 @@ class MultipleAlphaTerm:
         return MultipleAlphaTerm(new_terms, self.add_coefficient ** power)
 
     def __truediv__(self, other):
-        return self.__mul__(1 / other)
+        if type(other) in [int, float]:
+            if other == 0:
+                raise ValueError("MultipleAlphaTerm object cannot be divided by zero")
+            return self.__mul__(1 / other)
+        elif isinstance(other, type(self.terms[-1])):
+            if other.is_equal_zero:
+                raise ValueError("MultipleAlphaTerm object cannot be divided by zero")
+            else:
+                new_object = other.__copy__()
+                new_object.set_coefficient(1 / other.get_coefficient())
+                new_object.set_exponent(-other.get_exponent())
+            return MultipleAlphaTerm(self.terms + [new_object])
+        elif isinstance(other, type(self)):
+            other_terms = []
+            for term in other.terms:
+                new_term = term.__copy__()
+                new_term.set_coefficient(1 / term.get_coefficient())
+                new_term.set_exponent(-term.get_exponent)
+                other_terms.append(new_term)
+
+            return MultipleAlphaTerm(self.terms + [other_terms])
