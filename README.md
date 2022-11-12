@@ -1,5 +1,7 @@
 # exponential-expressions
 
+**Quick Note: If you don't want this project as a library you had to change this line in alpha_term.py** `from .multiple_alpha_term import MultipleAlphaTerm` **to** `from multiple_alpha_term import MultipleAlphaTerm`
+
 **What does this repo do?**
 
 This repo allows you to create exponential terms using unknown numbers comfortably. You can do various math applications using this repository. Like binomial expansion, derivative, integral...
