@@ -99,3 +99,6 @@ class MultipleAlphaTerm:
                 other_terms.append(new_term)
 
             return MultipleAlphaTerm(self.terms + [other_terms])
+
+    def __float__(self):
+        return float(self.coefficient)

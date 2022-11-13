@@ -122,3 +122,6 @@ class AlphaTerm:
                 other_terms.append(new_term)
 
             return MultipleAlphaTerm([self] + other_terms)
+
+    def __float__(self):
+        return float(self.coefficient)
