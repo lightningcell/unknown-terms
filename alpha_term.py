@@ -1,4 +1,5 @@
 from .multiple_alpha_term import MultipleAlphaTerm
+from .printer import TermPrinter
 
 
 class AlphaTerm:
@@ -7,7 +8,6 @@ class AlphaTerm:
         self.__alpha = _alpha
         self.__exponent = _exp
         self.is_equal_zero = True if self.__coefficient == 0 else False
-        self.is_equal_one = True if self.__exponent == 0 else False
 
     def get_coefficient(self) -> float:
         return self.__coefficient
@@ -24,29 +24,15 @@ class AlphaTerm:
         abs_exponent = abs(self.__exponent)
         result = minus if self.__exponent < 0 else ""
 
-        if self.__exponent in [0, 1]:
-            return ""
-        else:
-            for i in str(abs_exponent):
-                result += exponents[int(i)]
-            return result
+        for i in str(abs_exponent):
+            result += exponents[int(i)]
+        return result
 
     def get_printable_coefficient(self) -> str:
-        if self.__coefficient == 1.0:
-            return ""
-        else:
-            if self.__coefficient.is_integer():
-                return str(int(self.__coefficient))
-            else:
-                return str(self.__coefficient)
+        return str(int(self.__coefficient)) if float(self.__coefficient).is_integer() else str(self.__coefficient)
 
     def get_full_term(self) -> str:
-        if self.is_equal_zero:
-            return "0"
-        elif self.is_equal_one:
-            return "1"
-        else:
-            return self.get_printable_coefficient() + self.__alpha + self.get_printable_exponent()
+        return self.get_printable_coefficient() + self.get_alpha() + self.get_printable_exponent()
 
     def set_coefficient(self, _coe: float) -> None:
         self.__coefficient = _coe
@@ -69,10 +55,6 @@ class AlphaTerm:
             return AlphaTerm(new_coefficient, self.__alpha, self.__exponent)
         elif isinstance(other, type(self)):
             other: AlphaTerm
-            if other.is_equal_one:
-                return self.__copy__()
-            if other.is_equal_zero:
-                return other
             if other.get_alpha() == self.__alpha:
                 new_coefficient = other.get_coefficient() * self.__coefficient
                 new_exponent = other.get_exponent() + self.__exponent
@@ -80,8 +62,9 @@ class AlphaTerm:
             else:
                 return MultipleAlphaTerm([self, other])
         elif isinstance(other, MultipleAlphaTerm):
-            other.terms.extend([self.__copy__()])
-            return MultipleAlphaTerm(other.terms)
+            new_terms = other.terms.copy()
+            new_terms.extend([self])
+            return MultipleAlphaTerm(new_terms)
 
     def __rmul__(self, other):
         return self.__mul__(other)
@@ -90,10 +73,6 @@ class AlphaTerm:
         return AlphaTerm(self.__coefficient, self.__alpha, self.__exponent)
 
     def __pow__(self, power):
-        if power == 0:
-            new_object = self.__copy__()
-            new_object.is_equal_one = True
-            return new_object
         if isinstance(power, int):
             new_coefficient = self.__coefficient ** power
             new_exponent = self.__exponent * power
@@ -125,3 +104,8 @@ class AlphaTerm:
 
     def __float__(self):
         return float(self.coefficient)
+
+    def __abs__(self):
+        new_term = self.__copy__()
+        new_term.set_coefficient(abs(self.__coefficient))
+        return new_term

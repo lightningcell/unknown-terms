@@ -2,8 +2,19 @@ class MultipleAlphaTerm:
     def __init__(self, _terms, _add_coefficient=1.0):
         self.terms = _terms
         self.add_coefficient = _add_coefficient
-        self.coefficient = 1.0 * _add_coefficient
+        self.__coefficient = 1.0 * _add_coefficient
         self.seperated_terms = self.seperate_by_alphas()
+
+    def get_coefficient(self):
+        return self.__coefficient
+
+    def get_printable_coefficient(self):
+        if self.__coefficient.is_integer():
+            printable_coefficient = int(self.__coefficient)
+        else:
+            printable_coefficient = self.__coefficient
+
+        return printable_coefficient
 
     @staticmethod
     def __multiply_alpha_bros(terms) -> 'AlphaTerm':
@@ -15,8 +26,6 @@ class MultipleAlphaTerm:
     def seperate_by_alphas(self) -> list:
         terms_dict = dict()
         for _term in self.terms:
-            if _term.is_equal_one:
-                continue
             if not terms_dict.get(_term.get_alpha()):
                 terms_dict[_term.get_alpha()] = list()
             terms_dict[_term.get_alpha()].append(_term)
@@ -28,24 +37,18 @@ class MultipleAlphaTerm:
         final_terms = []
         for t in terms_dict.values():
             final_terms.append(t[0])
-            self.coefficient *= t[0].get_coefficient()
-
+            self.__coefficient *= t[0].get_coefficient()
         return final_terms
 
     def get_full_term(self) -> str:
         alpha_exp = ""
 
         for term in self.seperated_terms:
-            if term.is_equal_zero:
-                return "0"
-            if term.is_equal_one:
-                continue
             alpha_exp += term.get_alpha() + term.get_printable_exponent()
 
-        if self.coefficient.is_integer():
-            self.coefficient = int(self.coefficient)
+        printable_coefficient = self.get_printable_coefficient()
 
-        return ("" if self.coefficient == 1.0 else str(self.coefficient)) + alpha_exp
+        return str(printable_coefficient) + alpha_exp
 
     def turn_to_known(self, **values) -> float:
         result = 1
@@ -101,4 +104,10 @@ class MultipleAlphaTerm:
             return MultipleAlphaTerm(self.terms + [other_terms])
 
     def __float__(self):
-        return float(self.coefficient)
+        return float(self.__coefficient)
+
+    def __abs__(self):
+        new_term = MultipleAlphaTerm(self.terms, self.add_coefficient)
+        new_term.coefficient = abs(new_term.coefficient)
+        new_term.add_coefficient = abs(new_term.add_coefficient)
+        return new_term
