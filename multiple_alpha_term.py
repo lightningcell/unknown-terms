@@ -8,14 +8,6 @@ class MultipleAlphaTerm:
     def get_coefficient(self):
         return self.__coefficient
 
-    def get_printable_coefficient(self):
-        if self.__coefficient.is_integer():
-            printable_coefficient = int(self.__coefficient)
-        else:
-            printable_coefficient = self.__coefficient
-
-        return printable_coefficient
-
     @staticmethod
     def __multiply_alpha_bros(terms) -> 'AlphaTerm':
         result = 1
@@ -46,9 +38,7 @@ class MultipleAlphaTerm:
         for term in self.seperated_terms:
             alpha_exp += term.get_alpha() + term.get_printable_exponent()
 
-        printable_coefficient = self.get_printable_coefficient()
-
-        return str(printable_coefficient) + alpha_exp
+        return str(self.get_coefficient()) + alpha_exp
 
     def turn_to_known(self, **values) -> float:
         result = 1

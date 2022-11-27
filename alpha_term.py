@@ -18,21 +18,15 @@ class AlphaTerm:
     def get_exponent(self) -> int:
         return self.__exponent
 
-    def get_printable_exponent(self) -> str:
-        minus = "⁻"
-        exponents = ['⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹']
-        abs_exponent = abs(self.__exponent)
-        result = minus if self.__exponent < 0 else ""
-
-        for i in str(abs_exponent):
-            result += exponents[int(i)]
-        return result
+    def get_printable_exponent(self):
+        return TermPrinter.get_printable_exponent(self.__exponent, False)
 
     def get_printable_coefficient(self) -> str:
-        return str(int(self.__coefficient)) if float(self.__coefficient).is_integer() else str(self.__coefficient)
+        return TermPrinter.get_printable_coefficient(self.__coefficient)
 
     def get_full_term(self) -> str:
-        return self.get_printable_coefficient() + self.get_alpha() + self.get_printable_exponent()
+        # Irregular term
+        return str(self.__coefficient) + self.__alpha + self.get_printable_exponent()
 
     def set_coefficient(self, _coe: float) -> None:
         self.__coefficient = _coe

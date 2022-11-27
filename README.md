@@ -1,6 +1,28 @@
-# exponential-expressions
+# unknown-numbers
 
-**Quick Note: If you don't want this project as a library you had to change this line in alpha_term.py** `from .multiple_alpha_term import MultipleAlphaTerm` **to** `from multiple_alpha_term import MultipleAlphaTerm`
+**How do you use?**
+
+```python
+from package_name.alpha_term import *
+
+# In this way, you can use every class on the package.
+```
+
+
+
+
+**Quick Note: If you don't want this project as a 
+library you had to change this lines in alpha_term.py** 
+
+`from .multiple_alpha_term import MultipleAlphaTerm`
+
+`from .printer import TermPrinter`
+
+**to**
+ 
+`from multiple_alpha_term import MultipleAlphaTerm`
+
+`from printer import TermPrinter`
 
 **What does this repo do?**
 
@@ -9,17 +31,14 @@ This repo allows you to create exponential terms using unknown numbers comfortab
 ```python
 term1 = AlphaTerm(2, "x", 2)  # That means 2x²
 
-print(term1.get_coefficient())
-print(term1.get_alpha())
-print(term1.get_exponent())
-print(term1.get_printable_exponent())
-print(term1)
+print(term1.get_coefficient()) # 2.0
+print(term1.get_alpha()) # 'x'
+print(term1.get_exponent()) # 2
+print(term1.get_printable_exponent()) # ²
 
->>> 2
->>> x
->>> 2
->>> ²
->>> 2x²
+print(term1) # Irregular -> 2.0x²
+print(TermPrinter.print(term1)) # Regular 2x²
+
 ```
 
 
@@ -40,29 +59,9 @@ term1 = AlphaTerm(3, "a", 4)
 term2 = AlphaTerm(4, "b", 5)
 m_term = term1 * term2  # This expression returns MultipleAlphaTerm(term1, term2)
 
-print(m_term)
+print(m_term) # 12.0a⁴b⁵
+print(TermPrinter.print(m_term)) # 12a⁴b⁵
 
->>> 12a⁴b⁵
 ```
 
 - _NOT: Operations such as exponentiation, division, multiplication can also be applied to objects in the MultipleAlpaTerm class._
-
-
-### Examples
-
-
-
-**_AlphaTerm Class Test_**
-
-<img src="./test/test1.PNG" alt="TEST1" width="1000">
-
-
-**_MultipleAlphaTerm Class Test_**
-
-<img src="./test/test2.PNG" alt="TEST2" width="1000">
-
-
-
-
-
-
