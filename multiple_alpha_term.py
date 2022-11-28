@@ -98,6 +98,6 @@ class MultipleAlphaTerm:
 
     def __abs__(self):
         new_term = MultipleAlphaTerm(self.terms, self.add_coefficient)
-        new_term.coefficient = abs(new_term.coefficient)
+        new_term.__coefficient = abs(new_term.get_coefficient())
         new_term.add_coefficient = abs(new_term.add_coefficient)
         return new_term

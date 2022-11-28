@@ -7,9 +7,11 @@ class TermPrinter:
         sign = ""
         if with_sign:
             if any_term.get_coefficient() < 0:
-                sign = "-" + (" " * sign_space)
+                sign = (" " * sign_space) + "-" + (" " * sign_space)
             elif any_term.get_coefficient() > 0:
-                sign = "+" + (" " * sign_space)
+                sign = (" " * sign_space) + "+" + (" " * sign_space)
+
+            any_term = abs(any_term)  # The sign will be add already
 
         if hasattr(any_term, "terms"):
             return sign + TermPrinter.__print_multiple_alpha_term(any_term)
@@ -48,7 +50,11 @@ class TermPrinter:
             if len(alp_exp) == 0:
                 return TermPrinter.get_printable_coefficient(coefficient)
             else:
-                return TermPrinter.get_printable_coefficient(coefficient) + alp_exp
+                pr_coe = ""
+                if coefficient != 1:
+                    pr_coe = TermPrinter.get_printable_coefficient(coefficient)
+
+                return pr_coe + alp_exp
 
     @staticmethod
     def get_printable_coefficient(_coe):
