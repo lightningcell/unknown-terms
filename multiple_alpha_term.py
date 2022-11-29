@@ -40,12 +40,38 @@ class MultipleAlphaTerm:
 
         return str(self.get_coefficient()) + alpha_exp
 
-    def turn_to_known(self, **values) -> float:
-        result = 1
-        for term in self.seperated_terms:
-            result *= term.turn_to_known(values[term.get_alpha()])
+    def turn_to_known(self, **values):
+        new_term = self.__copy__()
+        new_alpha_term = self.terms[0].__copy__()
 
-        return result
+        for term in self.seperated_terms:
+            value = values.get(term.get_alpha())
+
+            if value:
+                try:
+                    new_term.__coefficient /= term.get_coefficient()
+                except ZeroDivisionError:
+                    pass
+                new_term.__coefficient *= term.turn_to_known(value)
+                new_term.seperated_terms.remove(term)
+
+            if len(new_term.seperated_terms) == 1:
+                if new_term.seperated_terms[0].get_alpha() in values.keys():
+                    continue
+                else:
+                    new_alpha_term.set_coefficient(new_term.__coefficient)
+                    new_alpha_term.set_alpha(new_term.seperated_terms[0].get_alpha())
+                    new_alpha_term.set_exponent(new_term.seperated_terms[0].get_exponent())
+                    return new_alpha_term
+            elif len(new_term.seperated_terms) == 0:
+                return new_term.get_coefficient()
+            else:
+                print([t.get_alpha() for t in new_term.seperated_terms])
+                if set(values).intersection(set([t.get_alpha() for t in new_term.seperated_terms])):
+                    print("aha bura çalıştı")
+                    continue
+                else:
+                    return new_term
 
     def __str__(self) -> str:
         return self.get_full_term()
@@ -62,6 +88,9 @@ class MultipleAlphaTerm:
 
     def __rmul__(self, other):
         return self.__mul__(other)
+
+    def __copy__(self):
+        return MultipleAlphaTerm(self.terms, self.add_coefficient)
 
     def __pow__(self, power):
         new_terms = []

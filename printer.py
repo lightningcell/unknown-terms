@@ -66,6 +66,9 @@ class TermPrinter:
             return ""
 
         minus = "⁻"
+        if _exp == -1 and is_regular:
+            return minus
+
         exponents = ['⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹']
         abs_exponent = abs(_exp)
         result = minus if _exp < 0 else ""

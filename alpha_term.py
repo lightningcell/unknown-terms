@@ -19,9 +19,11 @@ class AlphaTerm:
         return self.__exponent
 
     def get_printable_exponent(self):
+        # This function uses TermPrinter but still returns irregular result
         return TermPrinter.get_printable_exponent(self.__exponent, False)
 
     def get_printable_coefficient(self) -> str:
+        # Returns regular coefficient
         return TermPrinter.get_printable_coefficient(self.__coefficient)
 
     def get_full_term(self) -> str:
