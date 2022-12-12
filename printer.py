@@ -2,7 +2,10 @@ class TermPrinter:
     @staticmethod
     def print(any_term, with_sign=False, sign_space=1):
         if type(any_term) in [float, int]:
-            return TermPrinter.get_printable_coefficient(any_term)
+            if any_term == 0:
+                return ""
+            else:
+                return TermPrinter.get_printable_coefficient(any_term)
 
         sign = ""
         if with_sign:

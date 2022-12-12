@@ -1,6 +1,6 @@
 class MultipleAlphaTerm:
-    def __init__(self, _terms, _add_coefficient=1.0):
-        self.terms = _terms
+    def __init__(self, _terms: list, _add_coefficient=1.0):
+        self.terms: list = _terms
         self.add_coefficient = _add_coefficient
         self.__coefficient = 1.0 * _add_coefficient
         self.seperated_terms = self.seperate_by_alphas()
@@ -40,6 +40,21 @@ class MultipleAlphaTerm:
 
         return str(self.get_coefficient()) + alpha_exp
 
+    def get_derivative(self, _d: str, degree=1):
+        terms = self.terms.copy()
+        for index, term in enumerate(terms):
+            if term.get_alpha() == _d:
+                derrived_term = term.get_derivative(degree)
+                if derrived_term == 0:
+                    return 0
+                else:
+                    terms[index] = derrived_term
+
+        if self.terms == terms:
+            raise ValueError("You can't derive from a variable that doesn't exist.")
+        else:
+            return MultipleAlphaTerm(terms)
+
     def turn_to_known(self, **values):
         new_term = self.__copy__()
         new_alpha_term = self.terms[0].__copy__()
@@ -66,7 +81,6 @@ class MultipleAlphaTerm:
             elif len(new_term.seperated_terms) == 0:
                 return new_term.get_coefficient()
             else:
-                print([t.get_alpha() for t in new_term.seperated_terms])
                 if set(values).intersection(set([t.get_alpha() for t in new_term.seperated_terms])):
                     print("aha bura çalıştı")
                     continue

@@ -30,6 +30,21 @@ class AlphaTerm:
         # Irregular term
         return str(self.__coefficient) + self.__alpha + self.get_printable_exponent()
 
+    def get_derivative(self, degree=1):
+        if degree == 0:
+            return self.__copy__()
+
+        if self.__exponent == 0:
+            return 0
+        else:
+            derrived_term = self.__copy__()
+            derrived_term.set_coefficient(self.__coefficient * self.__exponent)
+            derrived_term.set_exponent(self.__exponent - 1)
+            if degree == 1:
+                return derrived_term
+            else:
+                return derrived_term.get_derivative(degree - 1)
+
     def set_coefficient(self, _coe: float) -> None:
         self.__coefficient = _coe
 
