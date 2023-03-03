@@ -114,7 +114,7 @@ class AlphaTerm:
             return MultipleAlphaTerm([self] + other_terms)
 
     def __float__(self):
-        return float(self.coefficient)
+        return float(self.__coefficient)
 
     def __abs__(self):
         new_term = self.__copy__()

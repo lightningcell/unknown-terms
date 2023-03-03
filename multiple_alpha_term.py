@@ -1,17 +1,23 @@
 class MultipleAlphaTerm:
-    def __init__(self, _terms: list, _add_coefficient=1.0):
+    def __init__(self, _terms: list):
         self.terms: list = _terms
-        self.add_coefficient = _add_coefficient
-        self.__coefficient = 1.0 * _add_coefficient
+        self.__coefficient = self.get_coefficient()
         self.seperated_terms = self.seperate_by_alphas()
 
+    def set_coefficient(self, value):
+        self.__coefficient = value
+
     def get_coefficient(self):
-        return self.__coefficient
+        result = 1
+        for term in self.terms:
+            result *= term.get_coefficient()
+
+        return result
 
     @staticmethod
     def __multiply_alpha_bros(terms) -> 'AlphaTerm':
-        result = 1
-        for term in terms:
+        result = terms[0]
+        for term in terms[1:]:
             result *= term
         return result
 
@@ -29,7 +35,6 @@ class MultipleAlphaTerm:
         final_terms = []
         for t in terms_dict.values():
             final_terms.append(t[0])
-            self.__coefficient *= t[0].get_coefficient()
         return final_terms
 
     def get_full_term(self) -> str:
@@ -42,6 +47,7 @@ class MultipleAlphaTerm:
 
     def get_derivative(self, _d: str, degree=1):
         terms = self.terms.copy()
+
         for index, term in enumerate(terms):
             if term.get_alpha() == _d:
                 derrived_term = term.get_derivative(degree)
@@ -49,6 +55,7 @@ class MultipleAlphaTerm:
                     return 0
                 else:
                     terms[index] = derrived_term
+                    continue
 
         if self.terms == terms:
             raise ValueError("You can't derive from a variable that doesn't exist.")
@@ -82,7 +89,6 @@ class MultipleAlphaTerm:
                 return new_term.get_coefficient()
             else:
                 if set(values).intersection(set([t.get_alpha() for t in new_term.seperated_terms])):
-                    print("aha bura çalıştı")
                     continue
                 else:
                     return new_term
@@ -92,26 +98,28 @@ class MultipleAlphaTerm:
 
     def __mul__(self, other) -> 'MultipleAlphaTerm':
         if isinstance(other, int) or isinstance(other, float):
-            return MultipleAlphaTerm(self.terms, _add_coefficient=other * self.add_coefficient)
+            new_terms = self.terms.copy()
+            new_terms[-1] = new_terms[-1].__copy__() * other
+            return MultipleAlphaTerm(new_terms)
         elif isinstance(other, type(self.terms[-1])):  # self.terms[-1] always will be an AlphaTerm object.
             new_terms = self.terms + [other]
-            return MultipleAlphaTerm(new_terms, self.add_coefficient)
+            return MultipleAlphaTerm(new_terms)
         elif isinstance(other, type(self)):
             new_terms = self.terms + other.terms
-            return MultipleAlphaTerm(new_terms, self.add_coefficient)
+            return MultipleAlphaTerm(new_terms)
 
     def __rmul__(self, other):
         return self.__mul__(other)
 
     def __copy__(self):
-        return MultipleAlphaTerm(self.terms, self.add_coefficient)
+        return MultipleAlphaTerm(self.terms)
 
     def __pow__(self, power):
         new_terms = []
         for term in self.seperated_terms:
             new_terms.append(term ** power)
 
-        return MultipleAlphaTerm(new_terms, self.add_coefficient ** power)
+        return MultipleAlphaTerm(new_terms)
 
     def __truediv__(self, other):
         if type(other) in [int, float]:
@@ -140,7 +148,7 @@ class MultipleAlphaTerm:
         return float(self.__coefficient)
 
     def __abs__(self):
-        new_term = MultipleAlphaTerm(self.terms, self.add_coefficient)
+        new_term = MultipleAlphaTerm(self.terms)
         new_term.__coefficient = abs(new_term.get_coefficient())
-        new_term.add_coefficient = abs(new_term.add_coefficient)
+        new_term.set_coefficient(abs(self.get_coefficient()))
         return new_term
