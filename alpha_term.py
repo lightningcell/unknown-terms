@@ -1,5 +1,5 @@
-from .multiple_alpha_term import MultipleAlphaTerm
-from .printer import TermPrinter
+from multiple_alpha_term import MultipleAlphaTerm
+from printer import TermPrinter
 
 
 class AlphaTerm:

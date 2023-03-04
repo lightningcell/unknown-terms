@@ -17,9 +17,9 @@ class TermPrinter:
             any_term = abs(any_term)  # The sign will be add already
 
         if hasattr(any_term, "terms"):
-            return sign + TermPrinter.__print_multiple_alpha_term(any_term)
+            return sign + TermPrinter.__print_multiple_alpha_term(abs(any_term))
         elif hasattr(any_term, "is_equal_zero"):
-            return sign + TermPrinter.__print_alpha_term(any_term)
+            return sign + TermPrinter.__print_alpha_term(abs(any_term))
         else:
             raise ValueError("The any_term parameter must be an actionable value.")
 
@@ -30,7 +30,7 @@ class TermPrinter:
         elif term.get_exponent() == 0:
             return term.get_printable_coefficient()
         elif term.get_exponent != 0:
-            if term.get_coefficient() == 1:
+            if abs(term.get_coefficient()) == 1:
                 return term.get_alpha() + TermPrinter.get_printable_exponent(term.get_exponent())
             else:
                 return (term.get_printable_coefficient()

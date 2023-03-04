@@ -148,7 +148,7 @@ class MultipleAlphaTerm:
         return float(self.__coefficient)
 
     def __abs__(self):
-        new_term = MultipleAlphaTerm(self.terms)
-        new_term.__coefficient = abs(new_term.get_coefficient())
-        new_term.set_coefficient(abs(self.get_coefficient()))
+        new_term = self.__copy__()
+        for i in range(0, len(new_term.terms)):
+            new_term.terms[i] = abs(new_term.terms[i])
         return new_term
